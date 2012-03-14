@@ -84,8 +84,8 @@ setup(name='Kotti',
       include_package_data=True,
       zip_safe=False,
       cmdclass={'test': PyTest},
-      install_requires=install_requires + tests_require,
-      #tests_require=tests_require,
+      install_requires=install_requires,
+      extras_require=dict(test=tests_require),
       dependency_links=[
       ],
       entry_points = """\
