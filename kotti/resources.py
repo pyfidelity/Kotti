@@ -413,8 +413,3 @@ def initialize_sql(engine, drop_all=False):
     commit()
 
     return DBSession()
-
-
-def appmaker(engine):
-    initialize_sql(engine)
-    return get_root
