@@ -135,7 +135,10 @@ def main(global_config, **settings):
     """ This function is a 'paste.app_factory' and returns a WSGI
     application.
     """
+    from kotti.resources import initialize_sql
     config = base_configure(global_config, **settings)
+    engine = engine_from_config(config.registry.settings, 'sqlalchemy.')
+    initialize_sql(engine)
     return config.make_wsgi_app()
 
 
@@ -143,7 +146,7 @@ def base_configure(global_config, **settings):
     """Resolve dotted names in settings, include plug-ins and create a
     Configurator.
     """
-    from kotti.resources import appmaker
+    from kotti.resources import get_root
 
     for key, value in conf_defaults.items():
         settings.setdefault(key, value)
@@ -198,8 +201,7 @@ def base_configure(global_config, **settings):
 
     config.commit()
 
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    config._set_root_factory(appmaker(engine))
+    config._set_root_factory(get_root)
 
     # add the authenticated user to the request object
     from kotti.security import get_user
