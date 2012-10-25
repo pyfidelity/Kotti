@@ -91,7 +91,7 @@ def app(db_session):
 @fixture
 def browser(db_session, request):
     from wsgi_intercept import add_wsgi_intercept, zope_testbrowser
-    add_wsgi_intercept('example.com', 80, app)
+    add_wsgi_intercept('example.com', 80, setup_app)
     browser = zope_testbrowser.WSGI_Browser('http://example.com/')
     if 'user' in request.keywords:
         # set auth cookie directly on the browser instance...
