@@ -8,8 +8,8 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 
+from kotti.interfaces import IImage
 from kotti.util import extract_from_settings
-from kotti.resources import IImage
 
 PIL.ImageFile.MAXBLOCK = 33554432
 
@@ -117,4 +117,4 @@ def _load_image_scales(settings):
 def includeme(config):
     _load_image_scales(config.registry.settings)
 
-    config.scan("kotti.views.image")
+    config.scan(__name__)

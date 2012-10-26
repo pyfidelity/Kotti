@@ -1,7 +1,7 @@
 Bigger tasks
 ============
 
-- (API-) Documentation
+- (API-) Documentation (work in progress)
 
 - A pluggable settings screen for content items for things like 'allow
   discussion', 'default page'.
@@ -23,12 +23,12 @@ http://groups.google.com/group/kotti or #kotti on IRC.
 Smaller tasks
 =============
 
+- Add a subscribe decorator to kotti.events, so that you can decorate
+  your functions instead of having to manually append to
+  kotti.events.listeners[object]
+
 - Many of the templates used in 'kotti/views/edit.py' have some legacy
   cruft in them.  Clean up.
-
-- Make better use of calls to fanstatic's need().  Only need() stuff where
-  it's actually needed.  Partially already implemented in
-  https://github.com/disko/Kotti/tree/feature/lighter_jqueryui_dependency_injection.
 
 - Move more navigation related functionality out of TemplateAPI and
   into snippets.
@@ -38,6 +38,9 @@ Smaller tasks
 - Define and document annotation "best practice".  I.e. add-on "namespaces"?
 
 - Define and document control panel "best practice" for add-ons.
+
+- Add ordering of children and hide/show(Content.in_navigation) to the contents
+  view.
 
 Upstream tasks
 ==============
