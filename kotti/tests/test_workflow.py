@@ -4,7 +4,6 @@ from zope.configuration import xmlconfig
 
 from kotti.testing import Dummy
 from kotti.testing import EventTestBase
-from kotti.testing import FunctionalTestBase
 from kotti.testing import UnitTestBase
 
 
@@ -123,30 +122,25 @@ class TestResetWorkflowCommand(UnitTestBase):
                 reset_workflow.assert_called_with(purge_existing=True)
 
 
-class TestDefaultWorkflow(FunctionalTestBase):
-    def setUp(self):
-        from kotti.resources import get_root
-
-        super(TestDefaultWorkflow, self).setUp()
-        self.root = get_root()
+class TestDefaultWorkflow:
 
     def make_document(self):
         from kotti import DBSession
-        from kotti.resources import Document
+        from kotti.resources import Document, get_root
 
-        content = self.root['document'] = Document()
+        content = get_root()['document'] = Document()
         DBSession.flush()
         DBSession.refresh(content)
         return content
 
-    def test_workflow_root(self):
+    def test_workflow_root(self, workflow, root):
         from kotti.workflow import get_workflow
 
-        wf = get_workflow(self.root)
+        wf = get_workflow(root)
         assert wf.name == u'simple'
-        assert self.root.state == u'public'
+        assert root.state == u'public'
 
-    def test_workflow_new_content(self):
+    def test_workflow_new_content(self, workflow, db_session):
         from kotti.workflow import get_workflow
 
         content = self.make_document()
@@ -158,14 +152,14 @@ class TestDefaultWorkflow(FunctionalTestBase):
         assert content.__acl__[-1] == (
             'Deny', 'system.Everyone', ALL_PERMISSIONS)
 
-    def test_workflow_transition(self):
+    def test_workflow_transition(self, workflow, db_session):
         from kotti.workflow import get_workflow
         content = self.make_document()
         wf = get_workflow(content)
         wf.transition_to_state(content, None, u'public')
         assert content.state == u'public'
 
-    def test_reset_workflow(self):
+    def test_reset_workflow(self, workflow, db_session):
         from kotti.workflow import get_workflow
         from kotti.workflow import reset_workflow
 
@@ -179,7 +173,7 @@ class TestDefaultWorkflow(FunctionalTestBase):
         assert content.state == u'public'
         assert len(content.__acl__) == len(save_acl)
 
-    def test_reset_workflow_purge_existing(self):
+    def test_reset_workflow_purge_existing(self, workflow, db_session):
         from kotti.workflow import get_workflow
         from kotti.workflow import reset_workflow
 

@@ -85,6 +85,19 @@ def app(db_session):
 
 
 @fixture
+def root(db_session):
+    from kotti.resources import get_root
+    return get_root()
+
+
+@fixture
+def workflow(config, events):
+    import pyramid_zcml
+    config.include(pyramid_zcml)
+    config.load_zcml('kotti:workflow.zcml')
+
+
+@fixture
 def browser(db_session, request):
     from wsgi_intercept import add_wsgi_intercept, zope_testbrowser
     add_wsgi_intercept('example.com', 80, setup_app)
